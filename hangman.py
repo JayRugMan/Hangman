@@ -28,13 +28,17 @@ def initialize_wordPhrase():
         
 # Creates a string with all blanks for the random word:
 def add_blank(list_wordPhrase):
+
     list_blanks = []
+
     for letter in list_wordPhrase:
             if letter.isalpha():
                     list_blanks.append('-')
             else:
                     list_blanks.append(' ')
+
     str_blanks = ''.join(list_blanks)
+
     return str_blanks
 
 
@@ -184,7 +188,6 @@ def main():
         
         # Adds correctly-guessed letters to final word and
         # prints it
-        final_word
         print('\n\t\t    ' + final_word)
         
         # This skips asking for a guess if the man is hung
