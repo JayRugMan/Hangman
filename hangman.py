@@ -6,18 +6,18 @@
 import os
 import sys
 import random
-import time
 
 # Initializes a list of words/phrases for 
 # player to guess
 def initialize_wordPhrase():
+    
     list_word_Phrases = ['python is fun', 
-                       'hello world', 
-                       'i love being a mormon',
-                       'this is only a test', 
-                       'isaiah is awesome',
-                       'elijah is awesome', 
-                       'suze and me forever',]
+                         'hello world', 
+                         'i love being a mormon',
+                         'this is only a test', 
+                         'isaiah is awesome',
+                         'elijah is awesome', 
+                         'suze and me forever',]
     
     int_num_of_word_phrases = len(list_word_Phrases)
     int_random_picker = random.randint(0, (int_num_of_word_phrases - 1))
@@ -46,7 +46,7 @@ def add_blank(list_wordPhrase):
 def print_title():
 
     # requires file ascii_title.txt
-    # See Zimm3r's anwer in
+    # See Zimm3r's answer in
     # https://stackoverflow.com/questions/4060221
     absolute_path = os.path.dirname(os.path.abspath(sys.argv[0]))
     absolute_path_2_title_file = absolute_path + '/' + 'ascii_title.txt'
@@ -59,18 +59,17 @@ def print_title():
 def draw_gallows(int_wrong_guess_count, list_hung_man):
     
     int_wgm1 = int_wrong_guess_count - 1
-    list_hanging_man = ['\t\t    =================', 
-                       '\t\t\t||', 
-                       '\t\t\t||', 
-                       '\t\t\t||', 
-                       '\t\t\t||        J J', 
-                       '\t\t\t||        | |', 
-                       '\t\t\t||        / \\', 
-                       '\t\t\t||       e | o', 
-                       '\t\t\t||        /|\\', 
-                       '\t\t\t||        ()', 
-                       '\t\t\t|/         |', 
-                       "\t\t   He's hung, you lost!\n\n\t\t\t+==========|"]
+    list_hanging_man = ['\t    =================', 
+                        '\t\t||', 
+                        '\t\t||', 
+                        '\t\t||        J J', 
+                        '\t\t||        | |', 
+                        '\t\t||        / \\', 
+                        '\t\t||       e | o', 
+                        '\t\t||        /|\\', 
+                        '\t\t||        ()', 
+                        '\t\t|/         |', 
+                        "\t   He's hung, you lost!\n\n\t\t+==========|"]
     
     if len(list_hung_man) < int_wrong_guess_count:
         list_hung_man.append(
@@ -83,14 +82,15 @@ def draw_gallows(int_wrong_guess_count, list_hung_man):
 # Prints out the hanging man, lines 
 # equal to the number of wrong guesses
 def print_hungman(list_hung_man):
+    
     for line in reversed(list_hung_man):
         print line
 
 
 # Builds the word with correct guesses
 def update_final_word(str_user_guess, 
-                        str_final_word, 
-                        str_word_Phrase):
+                      str_final_word, 
+                      str_word_Phrase):
     
     list_final_word = list(str_final_word)
     list_word_Phrase = list(str_word_Phrase)
@@ -115,23 +115,25 @@ def guess(str_word_Phrase,
     str_user_guess = ''
     str_wrong_guesses = '-'
     
+    # creates a string of wrong guesses with dashes 
+    # between the letters in list of wrong guesses
     for letter in list_wrong_guesses:
         str_wrong_guesses = str_wrong_guesses + letter + '-'
     
-    print('\n\tIncorrect letters guessed: %s' % str_wrong_guesses)
+    print('\n\tIncorrect letters guessed: \n\t%s' % str_wrong_guesses)
     
     # only one letter can be entered to exit loop
     while len(str_user_guess) != 1:
-        str_user_guess = raw_input('\n  Guess a letter: ')
+        str_user_guess = raw_input('\n\tGuess a letter: ')
     
     # if guess is wrong, and not already guessed
-    # then add to wrond guesses
+    # then adds to wrong guesses
     if (str_user_guess not in str_word_Phrase and 
         str_user_guess not in list_wrong_guesses):
         int_wrong_guess_count += 1
         list_wrong_guesses.append(str_user_guess)
     
-    # if guess is right, add it to final word
+    # if guess is right, adds it to final word
     elif (str_user_guess in str_word_Phrase and
           str_user_guess not in str_final_word):
           str_final_word = update_final_word(str_user_guess,
@@ -146,12 +148,13 @@ def guess(str_word_Phrase,
 # Print the winning Screen
 def print_winning_screen(str_final_word):
     
-    list_free_man = ['\t\t\t          () ', 
-                     '\t\t\t          /|\ ', 
-                     '\t\t\t         e | o ', 
-                     '\t\t\t          / \ ', 
-                     '\t\t\t          | | ', 
-                     '\t\t\t          J J ']
+    list_free_man = ['\t        O () ', 
+                     '\t         \/|\ ', 
+                     '\t           | o ', 
+                     '\t          / \ ', 
+                     '\t          | | ', 
+                     '\t          d L ', 
+                     '\t===============']
     
     # Clears the screen and prints title
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -161,8 +164,8 @@ def print_winning_screen(str_final_word):
         print(line)
     
     
-    print('\n\t\tThe correct phrase was "%s"!\n' % str_final_word)
-    print('\tWinner Winner, Chicken Dinner - you saved a man from hangin')
+    print('\n The correct phrase was "%s"!\n' % str_final_word)
+    print(' Winner Winner, Chicken Dinner \n You saved a man from hangin\'!')
 
 
 def main():
@@ -174,25 +177,22 @@ def main():
     wrong_guesses = []
     won = False
     
-    print word_Phrase
-    
-    # loop may play screen and print updates
-    while wrong_guess_count <= 12 and won is False:
-        # Clears the screen
+    # loop play screen and print updates 
+    # until man is hung or word is guessed
+    while wrong_guess_count <= 11 and won is False:
+        
+        # Updates the hanging man
+        hung_man = draw_gallows(wrong_guess_count, hung_man)
+        
+        # Clears the screen and prints updated values
         os.system('cls' if os.name == 'nt' else 'clear')
         print_title()
-        
-        # Updates and prints the hanging man
-        hung_man = draw_gallows(wrong_guess_count, hung_man)
         print_hungman(hung_man)
-        
-        # Adds correctly-guessed letters to final word and
-        # prints it
-        print('\n\t\t    ' + final_word)
+        print('\n\t    ' + final_word)
         
         # This skips asking for a guess if the man is hung
-        # while still allowing the hanging man to still show
-        if wrong_guess_count < 12:
+        # while still allowing the hanging man to print
+        if wrong_guess_count < 11:
             (wrong_guess_count, 
              wrong_guesses, 
              final_word) = guess(word_Phrase, 
