@@ -9,15 +9,15 @@ import random
 
 # Initializes a list of words/phrases for 
 # player to guess
-def initialize_wordPhrase():
+def initialize_wordPhrase(str_absolute_path):
     
-    list_word_Phrases = ['python is fun', 
-                         'hello world', 
-                         'i love being a mormon',
-                         'this is only a test', 
-                         'isaiah is awesome',
-                         'elijah is awesome', 
-                         'suze and me forever',]
+    # Requires wordList files
+    str_word_file = str_absolute_path + '/' + 'wordList_1.txt'
+
+    # Opens a file in the same directory and makes a list of words
+    # from each line of that file
+    with open(str_word_file, 'r') as words:
+        list_word_Phrases = [line.strip() for line in words]
     
     int_num_of_word_phrases = len(list_word_Phrases)
     int_random_picker = random.randint(0, (int_num_of_word_phrases - 1))
@@ -43,15 +43,12 @@ def add_blank(list_wordPhrase):
 
 
 # Prints the games title in ascii art:
-def print_title():
+def print_title(str_absolute_path):
 
     # requires file ascii_title.txt
-    # See Zimm3r's answer in
-    # https://stackoverflow.com/questions/4060221
-    absolute_path = os.path.dirname(os.path.abspath(sys.argv[0]))
-    absolute_path_2_title_file = absolute_path + '/' + 'ascii_title.txt'
+    str_title_file = str_absolute_path + '/' + 'ascii_title.txt'
     
-    with open(absolute_path_2_title_file, 'r') as title:
+    with open(str_title_file, 'r') as title:
         print title.read()
 
     
@@ -146,7 +143,7 @@ def guess(str_word_Phrase,
 
 
 # Print the winning Screen
-def print_winning_screen(str_final_word):
+def print_winning_screen(str_final_word, str_absolute_path):
     
     list_free_man = ['\t        O () ', 
                      '\t         \/|\ ', 
@@ -158,7 +155,7 @@ def print_winning_screen(str_final_word):
     
     # Clears the screen and prints title
     os.system('cls' if os.name == 'nt' else 'clear')
-    print_title()
+    print_title(str_absolute_path)
     
     for line in list_free_man:
         print(line)
@@ -169,10 +166,14 @@ def print_winning_screen(str_final_word):
 
 
 def main():
-
+    
+    # See Zimm3r's answer in
+    # https://stackoverflow.com/questions/4060221
+    absolute_path = os.path.dirname(os.path.abspath(sys.argv[0]))
+    
     hung_man = []
     wrong_guess_count = 0
-    word_Phrase = initialize_wordPhrase()
+    word_Phrase = initialize_wordPhrase(absolute_path)
     final_word = add_blank(word_Phrase)
     wrong_guesses = []
     won = False
@@ -186,7 +187,7 @@ def main():
         
         # Clears the screen and prints updated values
         os.system('cls' if os.name == 'nt' else 'clear')
-        print_title()
+        print_title(absolute_path)
         print_hungman(hung_man)
         print('\n\t    ' + final_word)
         
@@ -206,7 +207,7 @@ def main():
         # and the winning screen prints
         if final_word == word_Phrase:
             won = True
-            print_winning_screen(final_word)
+            print_winning_screen(final_word, absolute_path)
         
         print('\n\n')
 
