@@ -7,12 +7,19 @@ import os
 import sys
 import random
 
+# lists the files containing words or phrases
+# def list_wordPhrase_lists(str_absolute_pathabsolute_path):
+
+    # Gets list of files with .hmwl extension
+    # Loops thorugh files, numbering each
+    # displays numbers and prompts for a selection
+
 # Initializes a list of words/phrases for 
 # player to guess
 def initialize_wordPhrase(str_absolute_path):
     
     # Requires wordList files
-    str_word_file = str_absolute_path + '/' + 'wordList_1.txt'
+    str_word_file = str_absolute_path + '/' + 'wordList_1.hmwl'
 
     # Opens a file in the same directory and makes a list of words
     # from each line of that file
