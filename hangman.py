@@ -8,7 +8,7 @@ import sys
 import random
 
 # lists the files containing words or phrases
-# def list_wordPhrase_lists(str_absolute_pathabsolute_path):
+# def list_wordPhrase_lists(str_absolute_path):
 
     # Gets list of files with .hmwl extension
     # Loops thorugh files, numbering each
