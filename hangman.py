@@ -6,32 +6,92 @@
 import os
 import sys
 import random
+import fnmatch
+
+# returns a list .hmwl files in script's directory
+def get_hang_man_word_list(str_absolute_path):
+
+    # creates a list of file with .hmwl in same dir as this script
+    file_ext = '*.hmwl'
+    list_file_in_script_dir = os.listdir(str_absolute_path)
+    list_files = []
+    for str_file in list_file_in_script_dir:
+        # appends .hmwl files, if any, to list_files
+        if fnmatch.fnmatch(str_file, file_ext):
+            list_files.append(str_file)
+
+    return list_files
+
 
 # lists the files containing words or phrases
-# def list_wordPhrase_lists(str_absolute_path):
+def list_wordPhrase_lists(list_files):
 
-    # Gets list of files with .hmwl extension
-    # Loops thorugh files, numbering each
+    # Loops thorugh files, numbering each and, if a word list is found,
     # displays numbers and prompts for a selection
+    if len(list_files) is not 0:
+        int_wl_indexes = 1
+        print('Please choose from the following word/phrase lists\n')
+        for str_file in list_files:
+            print('{} - {}'.format(int_wl_indexes, str_file))
+            int_wl_indexes += 1
+        print('')
+    #if no word list file is found, exception is raised
+    else:
+        print("no word list found\n\
+Please create a file with a list of words or phrases\n\
+with the extension .hmwl in the same directory as this script")
+
+
+# returns user selection
+def user_hmwf_selection(list_files):
+
+    int_user_selection = 0
+    while (int_user_selection < 1 or
+           int_user_selection > len(list_files)):
+        try:
+            int_user_selection = int(raw_input(': '))
+        except:
+            continue
+
+    return int_user_selection
+
 
 # Initializes a list of words/phrases for 
 # player to guess
 def initialize_wordPhrase(str_absolute_path):
-    
-    # Requires wordList files
-    str_word_file = str_absolute_path + '/' + 'wordList_1.hmwl'
 
-    # Opens a file in the same directory and makes a list of words
-    # from each line of that file
-    with open(str_word_file, 'r') as words:
-        list_word_Phrases = [line.strip() for line in words]
+    # word phrase will stay empty if there is no
+    # word list ending in .hmwl
+    str_word_Phrase = []
+
+    # creates a list of .hmwl word list files 
+    list_files = get_hang_man_word_list(str_absolute_path)
+
+    # displays .hmwl files for user to choose from
+    # or displays exception if no .hmwl is found
+    list_wordPhrase_lists(list_files)
+
+    if len(list_files) is not 0:
+        # gets user's word file selection
+        int_user_selection = user_hmwf_selection(list_files)
+        selection_2_index = int_user_selection - 1
+
+        # defines the file based on the selection and absolute path
+        str_word_file =  (str_absolute_path
+                          + '/'
+                          + list_files[selection_2_index])
+        # Opens the selected file and makes a list of words
+        # from each line of that file
+        with open(str_word_file, 'r') as words:
+            list_word_Phrases = [line.strip() for line in words]
     
-    int_num_of_word_phrases = len(list_word_Phrases)
-    int_random_picker = random.randint(0, (int_num_of_word_phrases - 1))
-    str_word_Phrase = list_word_Phrases[int_random_picker]
+        # Randomely select from that list of words/phrases
+        int_num_of_word_phrases = len(list_word_Phrases)
+        int_random_picker = random.randint(0, (int_num_of_word_phrases - 1))
+        str_word_Phrase = list_word_Phrases[int_random_picker]
     
     return str_word_Phrase
-
+    
         
 # Creates a string with all blanks for the random word:
 def add_blank(list_wordPhrase):
@@ -127,7 +187,7 @@ def guess(str_word_Phrase,
     print('\n\tIncorrect letters guessed: \n\t%s' % str_wrong_guesses)
     
     # only one letter can be entered to exit loop
-    while len(str_user_guess) != 1:
+    while len(str_user_guess) is not 1:
         str_user_guess = raw_input('\n\tGuess a letter: ')
     
     # if guess is wrong, and not already guessed
@@ -180,11 +240,20 @@ def main():
     
     hung_man = []
     wrong_guess_count = 0
+
+    # if word list file is found, then is assigned
     word_Phrase = initialize_wordPhrase(absolute_path)
+    
+    # if wordlist is not found, no word_Phrase is assigned
+    # and won is set to true to bypass game loop and exit
+    if len(word_Phrase) is 0:
+        won = True # win by default :P
+    else:
+        won = False
+
     final_word = add_blank(word_Phrase)
     wrong_guesses = []
-    won = False
-    
+        
     # loop play screen and print updates 
     # until man is hung or word is guessed
     while wrong_guess_count <= 11 and won is False:
